@@ -1,5 +1,6 @@
 
-import Recipe from '../models/Recipe.js';
+import Recipe from '../../models/Recipe.js';
+import Message from '../../models/Message.js';
 
 export const Query = {
     async recipe(_, { ID }) {
@@ -15,6 +16,17 @@ export const Query = {
         try {
             const recipes = await Recipe.find().sort({ createdAt: -1 }).limit(amount);
             return recipes;
+        } catch (err) {
+            throw new Error(err);
+        }
+    },
+
+    // message
+
+    async message(_, { ID }) {
+        try {
+            const message = await Message.findById(ID);
+            return message;
         } catch (err) {
             throw new Error(err);
         }
@@ -54,7 +66,24 @@ export const Mutation = {
         } catch (err) {
             throw new Error(err);
         }
+    },
+
+    // message
+
+    async createMessage(_, { messageInput: { text, username } }) {
+        try {
+            const newMessage = new Message({
+                text,
+                username,
+                createdAt: new Date().toISOString(),
+            });
+            const message = await newMessage.save(); // save to database
+            return message;
+        } catch (err) {
+            throw new Error(err);
+        }
     }
+
 };
 
 export const resolvers = {
