@@ -6,4 +6,4 @@ const messageSchema = new Schema({
     createdBy: String
 });
 
-export const Message = model('Message', messageSchema);
+export default model('Message', messageSchema);

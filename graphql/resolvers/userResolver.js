@@ -1,4 +1,4 @@
-import User from "../../models/User";
+import User from "../../models/User.js";
 import { ApolloError } from "apollo-server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -13,7 +13,7 @@ export const Query = {
             throw new Error(err);
         }
     },
-
+    
     async registerUser(_, { registerInput: { username, email, password } }) {
         try {
             const olduser = await User.findOne({ email });
@@ -75,4 +75,9 @@ export const Mutation = {
             throw new Error(err);
         }
     }
+}
+
+export const userResolvers = {
+    Query,
+    Mutation
 }
