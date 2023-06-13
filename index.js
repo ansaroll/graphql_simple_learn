@@ -1,16 +1,13 @@
 import { ApolloServer } from 'apollo-server';
 import mongoose from 'mongoose';
 import { typeDefs } from './graphql/typeDefs.js';
-import { resolvers } from './graphql/resolvers/resolvers.js';
-import {userResolvers} from './graphql/resolvers/userResolver.js'
+import allResolvers from './graphql/resolvers/index.js';
 
 const MONGODB = "mongodb+srv://ansaroll:ansaroll@cluster0.ew8ropv.mongodb.net/?retryWrites=true&w=majority"
 
-
 const server = new ApolloServer({
     typeDefs,
-    resolvers,
-    userResolvers
+    resolvers: allResolvers
 });
 
 
