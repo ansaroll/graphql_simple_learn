@@ -80,13 +80,13 @@ export const userResolvers = {
 
                 // check if user exists
                 if (!user) {
-                    throw new ApolloError("User not found" + email, 'USER_NOT_FOUND');
+                    throw new ApolloError("User not found : " + email, 'USER_NOT_FOUND');
                 }
 
                 // check if password is correct
                 const match = await bcrypt.compare(password, user.password);
                 if (!match) {
-                    throw new ApolloError("Wrong credentials" + email, 'WRONG_CREDENTIALS');
+                    throw new ApolloError("Wrong credentials : " + email, 'WRONG_CREDENTIALS');
                 }
 
                 // create token & atach to user
