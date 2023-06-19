@@ -27,21 +27,25 @@ export const userResolvers = {
     },
 
     Mutation: {
-        async registerUser(_, { registerInput: { username, email, password } }) {
+        async registerUser(_, { registerInput: { username, email, password, lastName } }) {
             try {
                 const olduser = await User.findOne({ email });
 
                 // check if user exists
                 if (olduser) {
-                    throw new ApolloError("User already exists" + email, 'USER_ALREADY_EXISTS');
+                    throw new ApolloError("User already exists : " + email, 'USER_ALREADY_EXISTS');
                 }
 
                 // encrypt password
+                if (password.length < 6) {
+                    throw new ApolloError("Password must be at least 6 characters", 'PASSWORD_TOO_SHORT');
+                }
                 var encryptedPassword = await bcrypt.hash(password, 12);
 
                 // create new user
                 const newUser = new User({
                     username,
+                    lastName,
                     email: email.toLowerCase(),
                     password: encryptedPassword,
                 });
@@ -77,13 +81,13 @@ export const userResolvers = {
 
                 // check if user exists
                 if (!user) {
-                    throw new ApolloError("User not found" + email, 'USER_NOT_FOUND');
+                    throw new ApolloError("User not found : " + email, 'USER_NOT_FOUND');
                 }
 
                 // check if password is correct
                 const match = await bcrypt.compare(password, user.password);
                 if (!match) {
-                    throw new ApolloError("Wrong credentials" + email, 'WRONG_CREDENTIALS');
+                    throw new ApolloError("Wrong credentials : " + email, 'WRONG_CREDENTIALS');
                 }
 
                 // create token & atach to user
