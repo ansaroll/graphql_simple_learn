@@ -27,7 +27,7 @@ export const userResolvers = {
     },
 
     Mutation: {
-        async registerUser(_, { registerInput: { username, email, password } }) {
+        async registerUser(_, { registerInput: { username, email, password, lastName } }) {
             try {
                 const olduser = await User.findOne({ email });
 
@@ -45,6 +45,7 @@ export const userResolvers = {
                 // create new user
                 const newUser = new User({
                     username,
+                    lastName,
                     email: email.toLowerCase(),
                     password: encryptedPassword,
                 });
