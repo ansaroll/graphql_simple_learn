@@ -7,6 +7,8 @@ const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, },
     token: { type: String },
+    createdAt: { type: String, default: new Date().toISOString() },
+    updatedAt: { type: String, default: new Date().toISOString() }
 });
 
 export default model('User', userSchema);

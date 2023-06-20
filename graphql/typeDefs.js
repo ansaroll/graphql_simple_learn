@@ -87,6 +87,8 @@ export const typeDefs = gql`
         # user
         registerUser(registerInput: RegisterInput): UserReturned
         loginUser(loginInput:LoginInput) : UserReturned
+        editUser(ID: ID!, user: RegisterInput): UserReturned
+        deleteUser(ID: ID!): UserReturned
     }
 
 `

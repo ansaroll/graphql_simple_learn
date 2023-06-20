@@ -9,7 +9,10 @@ export const userResolvers = {
         async user(_, { ID }) {
             try {
                 const user = await User.findById(ID);
-                return user;
+                return {
+                    id: user.id,
+                    ...user._doc,
+                };
             }
             catch (err) {
                 throw new ApolloError(err);
@@ -48,6 +51,8 @@ export const userResolvers = {
                     lastName,
                     email: email.toLowerCase(),
                     password: encryptedPassword,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
                 });
 
                 // create token & atach to user
@@ -106,6 +111,65 @@ export const userResolvers = {
                     ...user._doc,
                 }
             } catch (err) {
+                throw new ApolloError(err);
+            }
+        },
+
+        async editUser(_, { ID, user: { username, lastName, email, password } }) {
+            try {
+                const user = await User.findById(ID);
+
+                // check if user exists
+                if (!user) {
+                    throw new ApolloError("User not found : " + ID, 'USER_NOT_FOUND');
+                }
+
+                // encrypt password
+                if (password.length < 6) {
+                    throw new ApolloError("Password must be at least 6 characters", 'PASSWORD_TOO_SHORT');
+                }
+                var encryptedPassword = await bcrypt.hash(password, 12);
+
+                // update user
+                user = {
+                    ...user,
+                    username: username || user.username,
+                    lastName: lastName || user.lastName,
+                    email: email || user.email,
+                    password: encryptedPassword || user.password,
+                }
+
+                // edit user
+                await user.save();
+
+                return {
+                    id: user.id,
+                    ...user._doc,
+                }
+
+            } catch (error) {
+                throw new ApolloError(err);
+            }
+        },
+
+        async deleteUser(_, { ID }) {
+            try {
+                const user = await User.findById(ID);
+
+                // check if user exists
+                if (!user) {
+                    throw new ApolloError("User not found : " + ID, 'USER_NOT_FOUND');
+                }
+
+                // delete user
+                await user.delete();
+
+                return {
+                    id: user.id,
+                    ...user._doc,
+                }
+
+            } catch (error) {
                 throw new ApolloError(err);
             }
         }
