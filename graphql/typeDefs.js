@@ -25,6 +25,17 @@ export const typeDefs = gql`
         token: String
     }
 
+    type UserReturned {
+        id: ID
+        username: String
+        lastName: String
+        firstName: String
+        email: String
+        token: String
+        createdAt: String
+        updatedAt: String
+    }
+
 # input type
     input RecipeInput {
         name: String!
@@ -59,7 +70,7 @@ export const typeDefs = gql`
         message(ID: ID): Message
         getAllMessages(ID: ID): [Message]
         # user
-        user(ID: ID): User
+        user(ID: ID): UserReturned
         getAllUsers(ID: ID): [User]
     }
     
@@ -74,8 +85,8 @@ export const typeDefs = gql`
         createMessage(messageInput: MessageInput): Message!
         deleteMessage(ID: ID!): Boolean
         # user
-        registerUser(registerInput: RegisterInput): User
-        loginUser(loginInput:LoginInput) : User
+        registerUser(registerInput: RegisterInput): UserReturned
+        loginUser(loginInput:LoginInput) : UserReturned
     }
 
 `
