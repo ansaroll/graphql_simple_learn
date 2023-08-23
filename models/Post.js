@@ -9,6 +9,9 @@ const postSchema = new Schema({
     comments: [{
         type: Schema.Types.ObjectId,
     }],
+    postLength: {
+        type: Number
+    },
 });
 
 const commentSchema = new Schema({

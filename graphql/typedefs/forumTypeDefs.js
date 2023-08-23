@@ -20,6 +20,11 @@ export const forumTypeDefs = gql`
         postId:ID
     }
 
+    type Posts {
+        posts: [Post]
+        postLength: Int
+    }
+
     input CommentInput {
         body:String
         createdBy:String
@@ -34,7 +39,7 @@ export const forumTypeDefs = gql`
 
     type Query {
         post(ID:ID): Post
-        posts(ID:ID):[Post]
+        posts(ID:ID):Posts
         # comment
         comment(ID:ID!): Comment
         comments(ID:ID): [Comment]

@@ -1,4 +1,4 @@
-import { Post , Comment } from '../../models/Post.js';
+import { Post, Comment } from '../../models/Post.js';
 import { ApolloError } from "apollo-server";
 
 export const forumResolvers = {
@@ -16,7 +16,8 @@ export const forumResolvers = {
         async posts(_, { ID }) {
             try {
                 const posts = await Post.find().sort({ createdAt: -1 }).limit(ID);
-                return posts
+                const postLength = posts.length;
+                return { posts, postLength }
             }
             catch (err) {
                 throw new ApolloError(err);
