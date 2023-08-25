@@ -49,6 +49,8 @@ export const forumTypeDefs = gql`
 
     type Mutation {
         createPost(postInput: PostInput): Post
+        editPost(ID:ID!, postInput: PostInput): Post
+        deletePost(ID:ID!): Post
         createComment(commentInput: CommentInput): Comment
         # delete comments
         deletComment(ID:ID!): Comment

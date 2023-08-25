@@ -71,6 +71,29 @@ export const forumResolvers = {
             }
         },
 
+        async editPost(_, { ID, postInput: { title, body, createdBy } }) {
+            try {
+                const post = await Post.findById(ID);
+                post.title = title || post.title;
+                post.body = body || post.body;
+                post.createdBy = createdBy || post.createdBy;
+                post.updatedAt = new Date().toISOString();
+                await post.save();
+                return post;
+            } catch (err) {
+                throw new ApolloError(err);
+            }
+        },
+
+        async deletePost(_, { ID }) {
+            try {
+                const wasDeleted = (await Post.deleteOne({ _id: ID })).deletedCount === 1;
+                return wasDeleted; // true or false
+            } catch (error) {
+                throw new ApolloError(error);
+            }
+        },
+
         async createComment(_, { commentInput: { body, createdBy, postId } }) {
             try {
                 const newComment = new Comment({
