@@ -9,12 +9,12 @@ const CabMedSchema = new Schema({
     description: String,
     experience: String,
     langues: String,
-    cv: File | null,
+    cv: String,
     createdAt: String,
     createdBy: String
 });  
 
-export default model('CabMed', CabMedSchema);
+export const CabMed =  model('CabMed', CabMedSchema);
 
 // type in Frontend
 

@@ -2,6 +2,8 @@ import { gql } from "apollo-server";
 
 export const cabMedTypeDefs = gql`
 
+    scalar Upload
+
     type CabMed {
         id: ID
         nom_cabinet: String
