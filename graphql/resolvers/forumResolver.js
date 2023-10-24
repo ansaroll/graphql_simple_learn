@@ -1,11 +1,11 @@
 import { Post, Comment } from '../../models/Post.js';
-import { ApolloError } from "apollo-server";
+import { GraphQLError as ApolloError } from 'graphql';
 
 export const forumResolvers = {
     Query: {
         async post(_, { ID }) {
             try {
-                const post = await Post.findById(ID);
+                const post = await Post.findById(ID).populate('comments').exec()
                 return post;
             }
             catch (err) {
@@ -15,8 +15,10 @@ export const forumResolvers = {
 
         async posts(_, { ID }) {
             try {
-                const posts = await Post.find().sort({ createdAt: -1 }).limit(ID);
+                const posts = await Post.find().populate('comments');
                 const postLength = posts.length;
+                // return: posts, postLength , all comments for each post
+                console.log('posts populated', posts);
                 return { posts, postLength }
             }
             catch (err) {

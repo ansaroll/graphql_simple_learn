@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose';
 
 const postSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     title: String,
     body: String,
     createdAt: String,
@@ -8,6 +9,7 @@ const postSchema = new Schema({
     createdBy: String,
     comments: [{
         type: Schema.Types.ObjectId,
+        ref: 'Comment'
     }],
     postLength: {
         type: Number
@@ -15,12 +17,14 @@ const postSchema = new Schema({
 });
 
 const commentSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     body: String,
     createdAt: String,
     updatedAt: String,
     createdBy: String,
     postId: {
         type: Schema.Types.ObjectId,
+        ref: 'Post'
     },
 });
 

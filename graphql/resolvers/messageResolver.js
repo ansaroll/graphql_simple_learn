@@ -1,5 +1,5 @@
 import Message from "../../models/Message.js";
-import { ApolloError } from "apollo-server";
+import { GraphQLError as ApolloError } from 'graphql';
 
 export const messageResolvers = {
     Query: {

@@ -10,12 +10,14 @@ const allResolvers = {
         ...resolvers.Query,
         ...messageResolvers.Query,
         ...forumResolvers.Query,
+        ...cabMedResolvers.Query,
     },
     Mutation: {
         ...userResolvers.Mutation,
         ...resolvers.Mutation,
         ...messageResolvers.Mutation,
         ...forumResolvers.Mutation,
+        ...cabMedResolvers.Mutation,
     }
 }
 

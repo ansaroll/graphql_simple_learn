@@ -1,5 +1,5 @@
 import User from "../../models/User.js";
-import { ApolloError } from "apollo-server";
+import { GraphQLError as ApolloError } from 'graphql';
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import omit from "lodash";
