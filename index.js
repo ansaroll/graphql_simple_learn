@@ -2,13 +2,10 @@ import mongoose from 'mongoose';
 import { forumTypeDefs } from './graphql/typedefs/forumTypeDefs.js';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { cabMedTypeDefs } from './graphql/typedefs/cabMedTypeDefs.js';
-import graphqlUploadKoa from "graphql-upload/graphqlUploadKoa.mjs";
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 // import Express from 'express';
 
 const MONGODB = "mongodb+srv://ansaroll:ansaroll@cluster0.ew8ropv.mongodb.net/?retryWrites=true&w=majority"
-
-import { fileURLToPath } from "node:url";
-
 // Ensure the upload directory exists.
 
 // npm install @apollo/server express graphql cors body-parser
@@ -22,10 +19,14 @@ import bodyParser from 'body-parser';
 
 import { typeDefs } from './graphql/typeDefs.js';
 import allResolvers from './graphql/resolvers/index.js';
-import makeDir from 'make-dir';
-import UPLOAD_DIRECTORY_URL from "./config/UPLOAD_DIRECTORY_URL.js";
+import path from 'path'
 
-await makeDir(fileURLToPath(UPLOAD_DIRECTORY_URL));
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const UPLOAD_DIR = path.resolve(__dirname, './uploads');
+
 
 // Required logic for integrating with Express
 const app = express();
@@ -35,6 +36,8 @@ const app = express();
 
 const httpServer = http.createServer(app);
 
+app.use('/uploads',express.static(UPLOAD_DIR));
+
 // Same ApolloServer initialization as before, plus the drain plugin
 // for our httpServer.
 const allTypeDefs = mergeTypeDefs([typeDefs, forumTypeDefs, cabMedTypeDefs]);
@@ -43,10 +46,12 @@ const server = new ApolloServer({
     typeDefs: allTypeDefs,
     resolvers: allResolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    uploads: false
 });
 // Ensure we wait for our server to start
 await server.start();
 
+app.use(graphqlUploadExpress());
 // Set up our Express middleware to handle CORS, body parsing,
 // and our expressMiddleware function.
 app.use(
@@ -60,10 +65,6 @@ app.use(
     }),
 );
 
-app.use(graphqlUploadKoa({
-    maxFileSize: 10000000,
-    maxFiles: 10
-}))
 
 // Modified server startup
 await new Promise((resolve) => httpServer.listen({ port: 5000 }, resolve));

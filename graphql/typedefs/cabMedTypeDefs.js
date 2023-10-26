@@ -14,7 +14,7 @@ export const cabMedTypeDefs = gql`
         description: String
         experience: String
         langues: String
-        cv: String
+        cv: Upload
         createdAt: String
         createdBy: String
     }
@@ -28,7 +28,7 @@ export const cabMedTypeDefs = gql`
         description: String
         experience: String
         langues: String
-        cv: String
+        cv: Upload
         createdAt: String
         createdBy: String
     }
